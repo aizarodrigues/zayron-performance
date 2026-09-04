@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zayron Motors — Central de Performance</title>
+<style>
+:root{--blue:#123B6D;--blue2:#1E5A96;--bg:#F4F7FB;--card:#fff;--text:#1D2633;--muted:#6B7785;--green:#238636;--yellow:#B7791F;--red:#C0392B;--line:#E4EAF1}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;padding:28px 32px}
+header h1{margin:0;font-size:26px} header p{margin:7px 0 0;opacity:.9}
+.wrap{max-width:1280px;margin:0 auto;padding:24px}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;background:#fff;padding:16px;border-radius:14px;box-shadow:0 2px 10px #0000000d;margin-bottom:18px}
+button,.filelabel,select{border:0;border-radius:10px;padding:11px 14px;font-weight:600}
+.filelabel{background:var(--blue);color:#fff;cursor:pointer} input[type=file]{display:none}
+button{cursor:pointer}.secondary{background:#EAF1F8;color:var(--blue)} .danger{background:#FBE9E7;color:var(--red)}
+select{background:#F2F5F8;color:#243447}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}
+.card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 2px 10px #0000000d}
+.kpi .label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}.kpi .value{font-size:26px;font-weight:800;margin-top:8px;color:var(--blue)}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:26px 0 10px}.section-title h2{font-size:18px;margin:0}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px #0000000d}
+th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}th{background:#EAF1F8;color:var(--blue);font-size:12px;text-transform:uppercase}
+.badge{display:inline-block;border-radius:999px;padding:5px 9px;font-weight:800;font-size:11px}.escalar{background:#DDF3E3;color:var(--green)}.manter{background:#DDEBFA;color:var(--blue)}.observar{background:#FFF1C9;color:var(--yellow)}.revisar{background:#FADDD8;color:var(--red)}.sem-dados{background:#ECEFF3;color:#68717D}
+.two{display:grid;grid-template-columns:1.2fr 1fr;gap:14px}.chart{background:#fff;padding:18px;border-radius:14px;box-shadow:0 2px 10px #0000000d}
+.barrow{display:grid;grid-template-columns:minmax(150px,1.6fr) 3fr 90px;gap:10px;align-items:center;margin:10px 0;font-size:12px}.track{height:12px;background:#EEF2F6;border-radius:99px;overflow:hidden}.bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--blue2));border-radius:99px}
+.rec{padding:14px;border-left:5px solid var(--blue);background:#fff;border-radius:10px;margin:10px 0;box-shadow:0 2px 8px #0000000a}.rec strong{color:var(--blue)}
+.indicators{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.indicator{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 10px #0000000d}
+.indicator .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.indicator .name{font-size:12px;text-transform:uppercase;color:var(--muted);font-weight:800}
+.indicator .ival{font-size:22px;font-weight:800;color:var(--blue);margin:7px 0}
+.indicator .why{font-size:12px;line-height:1.45;color:#4A5563}
+.campaign-card{background:#fff;border-radius:14px;margin:14px 0;box-shadow:0 2px 10px #0000000d;overflow:hidden}
+.campaign-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:16px 18px;background:#F8FAFC;border-bottom:1px solid var(--line)}
+.campaign-head h3{margin:0;font-size:15px;color:var(--blue)}
+.campaign-body{padding:16px 18px}
+.metric-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.metric-mini{border:1px solid var(--line);border-radius:10px;padding:11px;background:#fff}
+.metric-mini .mname{font-size:10px;color:var(--muted);font-weight:800;text-transform:uppercase}
+.metric-mini .mval{font-size:17px;font-weight:800;color:var(--blue);margin:5px 0}
+.actionbox{margin-top:12px;padding:13px;border-radius:10px;background:#F6F8FB;font-size:12px;line-height:1.5}
+.actionbox b{color:var(--blue)}
+@media(max-width:900px){.metric-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.metric-grid{grid-template-columns:1fr}}
+.excelente{background:#D9F2E3;color:#18713A}.bom{background:#E1EFFC;color:#185A92}.atencao{background:#FFF0C2;color:#8B6514}.ruim{background:#FADBD7;color:#9D2D21}
+@media(max-width:900px){.indicators{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.indicators{grid-template-columns:1fr}}
+.note{font-size:12px;color:var(--muted);margin-top:10px}.empty{padding:30px;text-align:center;color:var(--muted);background:#fff;border-radius:14px}
+.toast{position:fixed;right:18px;bottom:18px;background:#1F2937;color:#fff;padding:12px 16px;border-radius:10px;display:none;max-width:360px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.wrap{padding:14px}}
+@media(max-width:560px){.grid{grid-template-columns:1fr}.barrow{grid-template-columns:1fr}.track{height:10px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Zayron Motors — Central de Performance</h1>
+  <p>Análise diária das campanhas da Meta Ads com histórico mensal salvo neste navegador.</p>
+</header>
+<div class="wrap">
+  <div class="toolbar">
+    <label class="filelabel">Importar CSV da Meta<input id="file" type="file" accept=".csv,text/csv"></label>
+    <select id="month"></select>
+    <button class="secondary" id="exportBtn">Exportar histórico</button>
+    <label class="secondary" style="cursor:pointer">Importar histórico<input id="historyFile" type="file" accept=".json,application/json"></label>
+    <button class="danger" id="clearBtn">Limpar histórico</button>
+    <span id="status" class="note"></span>
+  </div>
+
+  <div id="app"><div class="empty">Importe o primeiro CSV da Zayron para começar.</div></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const K={
+ start:'Início dos relatórios', end:'Encerramento dos relatórios', campaign:'Nome da campanha',
+ impressions:'Impressões', reach:'Alcance', frequency:'Frequência',
+ cpm:'CPM (custo por 1.000 impressões) (BRL)', ctr:'CTR (taxa de cliques no link)',
+ cpc:'CPC (custo por clique no link) (BRL)', delivery:'Veiculação da campanha',
+ conversations:'Conversas por mensagem iniciadas',
+ costconv:'Custo por conversa por mensagem iniciada (BRL)',
+ spend:'Valor gasto (BRL)', clicks:'Cliques (todos)'
+};
+const storeKey='zayronPerformanceHistoryV1';
+const $=s=>document.querySelector(s);
+const fmtMoney=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(n||0);
+const fmtNum=n=>new Intl.NumberFormat('pt-BR',{maximumFractionDigits:0}).format(n||0);
+const fmtDec=n=>new Intl.NumberFormat('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n||0);
+function toast(msg){const t=$('#toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3200)}
+function getHist(){try{return JSON.parse(localStorage.getItem(storeKey)||'[]')}catch{return[]}}
+function saveHist(x){localStorage.setItem(storeKey,JSON.stringify(x))}
+function parseCSV(text){
+  let rows=[],row=[],field='',q=false;
+  for(let i=0;i<text.length;i++){
+    let c=text[i],n=text[i+1];
+    if(q){if(c=='"'&&n=='"'){field+='"';i++}else if(c=='"'){q=false}else field+=c}
+    else{if(c=='"')q=true; else if(c==','){row.push(field);field=''} else if(c=='\n'){row.push(field.replace(/\r$/,''));rows.push(row);row=[];field=''} else field+=c}
+  }
+  if(field.length||row.length){row.push(field.replace(/\r$/,''));rows.push(row)}
+  const head=rows.shift().map(x=>x.replace(/^\uFEFF/,'').trim());
+  return rows.filter(r=>r.some(x=>x.trim()!=='')).map(r=>Object.fromEntries(head.map((h,i)=>[h,(r[i]??'').trim()])));
+}
+function num(v){if(v==null||v==='')return 0; let s=String(v).trim(); if(s.includes(',')&&!s.includes('.'))s=s.replace(',','.'); else if(s.includes(',')&&s.includes('.'))s=s.replace(/\./g,'').replace(',','.'); return Number(s)||0}
+function isoDate(v){ if(!v)return ''; let s=v.slice(0,10); if(/^\d{4}-\d{2}-\d{2}$/.test(s))return s; let m=s.match(/(\d{2})\/(\d{2})\/(\d{4})/); return m?`${m[3]}-${m[2]}-${m[1]}`:s}
+function monthKey(d){return d?d.slice(0,7):''}
+function classify(c){
+ if(c.spend<=0)return 'SEM DADOS';
+ if(c.conversations<=0)return 'REVISAR';
+ let x=c.costconv;
+ if(x<=3)return 'ESCALAR';
+ if(x<=3.75)return 'MANTER';
+ if(x<=5)return 'OBSERVAR';
+ return 'REVISAR';
+}
+function cls(s){return s.toLowerCase().replace(' ','-')}
+function normalize(rows){
+ const missing=[K.campaign,K.spend,K.conversations].filter(k=>!(k in (rows[0]||{})));
+ if(missing.length)throw new Error('O CSV não tem as colunas esperadas: '+missing.join(', '));
+ const date=isoDate(rows[0][K.end]||rows[0][K.start]||new Date().toISOString().slice(0,10));
+ const campaigns=rows.map(r=>({
+   campaign:r[K.campaign], delivery:r[K.delivery]||'', spend:num(r[K.spend]), conversations:num(r[K.conversations]),
+   costconv:num(r[K.costconv]), ctr:num(r[K.ctr]), cpm:num(r[K.cpm]), cpc:num(r[K.cpc]),
+   reach:num(r[K.reach]), impressions:num(r[K.impressions]), frequency:num(r[K.frequency]), clicks:num(r[K.clicks])
+ }));
+ return {date, importedAt:new Date().toISOString(), campaigns};
+}
+function importDaily(entry){
+ let h=getHist(); const ix=h.findIndex(x=>x.date===entry.date);
+ if(ix>=0){ if(!confirm(`Já existe uma importação para ${entry.date}. Deseja substituí-la?`))return; h[ix]=entry; toast('Importação do dia substituída.')}
+ else{h.push(entry);toast('Importação diária salva.')}
+ h.sort((a,b)=>a.date.localeCompare(b.date));saveHist(h);refresh();
+}
+function aggregate(entries){
+ const all=entries.flatMap(e=>e.campaigns);
+ const msgs=all.filter(c=>c.conversations>0);
+ const spend=all.reduce((a,c)=>a+c.spend,0), conv=msgs.reduce((a,c)=>a+c.conversations,0);
+ const reach=all.reduce((a,c)=>a+c.reach,0);
+ const by={};
+ msgs.forEach(c=>{let x=by[c.campaign]||(by[c.campaign]={campaign:c.campaign,spend:0,conversations:0,ctrW:0,cpmW:0,cpcW:0,freqW:0,impr:0,reach:0});
+   x.spend+=c.spend;x.conversations+=c.conversations;x.reach+=c.reach||0;x.ctrW+=c.ctr*c.impressions;x.cpmW+=c.cpm*c.impressions;x.cpcW+=c.cpc*Math.max(c.clicks,1);x.freqW+=c.frequency*c.impressions;x.impr+=c.impressions;
+ });
+ const campaigns=Object.values(by).map(x=>({...x,costconv:x.conversations?x.spend/x.conversations:0,ctr:x.impr?x.ctrW/x.impr:0,cpm:x.impr?x.cpmW/x.impr:0,cpc:x.impr?x.cpcW/Math.max(1,x.impr):0,frequency:x.impr?x.freqW/x.impr:0,reach:x.reach||0})).sort((a,b)=>a.costconv-b.costconv);
+ return {spend,conv,cost:conv?spend/conv:0,reach,campaigns};
+}
+
+function weightedMetric(entries,key,weightKey='impressions'){
+  let nume=0, den=0;
+  entries.forEach(e=>e.campaigns.forEach(c=>{
+    const w=Math.max(0,c[weightKey]||0);
+    if((c[key]||0)>0 && w>0){nume+=c[key]*w;den+=w}
+  }));
+  return den?nume/den:0;
+}
+function indicatorStatus(name,value,a){
+  // Faixas iniciais para a Zayron. Serão substituídas por benchmarks históricos depois.
+  if(name==='CTR'){
+    if(value>=2)return ['EXCELENTE','excelente','Criativos chamando atenção e gerando cliques com boa eficiência.'];
+    if(value>=1.2)return ['BOM','bom','CTR saudável para continuar rodando e acompanhar custo por conversa.'];
+    if(value>=0.8)return ['ATENÇÃO','atencao','Pode indicar perda de força do criativo, oferta ou público.'];
+    return ['RUIM','ruim','Sinal de baixa atratividade. Revisar criativo, oferta e público antes de manter verba.'];
+  }
+  if(name==='CPM'){
+    if(value<=15)return ['EXCELENTE','excelente','Entrega barata para o padrão atual da conta.'];
+    if(value<=25)return ['BOM','bom','Custo de entrega saudável.'];
+    if(value<=35)return ['ATENÇÃO','atencao','Leilão mais caro. Avaliar público, posicionamentos e criativo.'];
+    return ['RUIM','ruim','Entrega cara. Se o custo por conversa também estiver alto, forte sinal de revisão.'];
+  }
+  if(name==='FREQUÊNCIA'){
+    if(value<=1.8)return ['BOM','bom','Boa distribuição, com baixa repetição média.'];
+    if(value<=2.5)return ['ATENÇÃO','atencao','A repetição começa a crescer; acompanhar fadiga do criativo.'];
+    return ['RUIM','ruim','Possível saturação. Considerar novo criativo ou ampliar público.'];
+  }
+  if(name==='CUSTO/CONVERSA'){
+    if(value<=3)return ['EXCELENTE','excelente','Alta eficiência para o recorte atual da Zayron.'];
+    if(value<=3.75)return ['BOM','bom','Custo saudável e compatível com campanhas que devem continuar.'];
+    if(value<=5)return ['ATENÇÃO','atencao','Ainda pode ser aproveitável, mas exige diagnóstico de CTR, CPM e volume.'];
+    return ['RUIM','ruim','Custo acima da faixa atual. Revisar antes de seguir investindo.'];
+  }
+  if(name==='ALCANCE'){
+    const avgSpendPerReach = a.reach ? a.spend/a.reach : 0;
+    if(a.reach>=40000)return ['BOM','bom','Boa capacidade de distribuição no período analisado.'];
+    if(a.reach>=20000)return ['ATENÇÃO','atencao','Alcance intermediário; interpretar junto de orçamento e frequência.'];
+    return ['ATENÇÃO','atencao','Alcance ainda limitado para leitura isolada. Avaliar período e verba.'];
+  }
+  if(name==='INVESTIMENTO'){
+    return ['OBSERVAÇÃO','bom','Investimento não é bom ou ruim sozinho; deve ser comparado ao volume e ao custo por conversa.'];
+  }
+  return ['OBSERVAÇÃO','bom','Interpretar em conjunto com os demais indicadores.'];
+}
+function buildIndicators(entries,a){
+  const ctr=weightedMetric(entries,'ctr');
+  const cpm=weightedMetric(entries,'cpm');
+  const freq=weightedMetric(entries,'frequency');
+  const items=[
+    ['CTR',ctr,`${fmtDec(ctr)}%`],
+    ['CPM',cpm,fmtMoney(cpm)],
+    ['ALCANCE',a.reach,fmtNum(a.reach)],
+    ['FREQUÊNCIA',freq,fmtDec(freq)],
+    ['CUSTO/CONVERSA',a.cost,fmtMoney(a.cost)],
+    ['INVESTIMENTO',a.spend,fmtMoney(a.spend)]
+  ];
+  return items.map(([name,val,label])=>{
+    const [status,css,why]=indicatorStatus(name,val,a);
+    return `<div class="indicator">
+      <div class="top"><div><div class="name">${name}</div><div class="ival">${label}</div></div><span class="badge ${css}">${status}</span></div>
+      <div class="why">${why}</div>
+    </div>`;
+  }).join('');
+}
+function campaignDiagnosis(c){
+  let score=0, reasons=[];
+  const sCost=indicatorStatus('CUSTO/CONVERSA',c.costconv,{});
+  const sCtr=indicatorStatus('CTR',c.ctr,{});
+  const sCpm=indicatorStatus('CPM',c.cpm,{});
+  const sFreq=indicatorStatus('FREQUÊNCIA',c.frequency,{});
+  const points={EXCELENTE:2,BOM:1,'ATENÇÃO':0,RUIM:-2};
+  score+=(points[sCost[0]]??0)*3; score+=(points[sCtr[0]]??0)*2; score+=(points[sCpm[0]]??0); score+=(points[sFreq[0]]??0);
+  if(c.conversations>=80)score+=2;
+  else if(c.conversations<15)score-=1;
+  if(sCost[0]==='RUIM')reasons.push('custo por conversa alto');
+  if(sCtr[0]==='RUIM'||sCtr[0]==='ATENÇÃO')reasons.push('CTR precisa de atenção');
+  if(sCpm[0]==='RUIM'||sCpm[0]==='ATENÇÃO')reasons.push('CPM elevado');
+  if(sFreq[0]==='RUIM')reasons.push('frequência alta');
+  if(!reasons.length)reasons.push('indicadores equilibrados');
+  let decision='MANTER',css='bom';
+  if(score>=7){decision='ESCALAR';css='excelente'}
+  else if(score>=3){decision='MANTER';css='bom'}
+  else if(score>=0){decision='OBSERVAR';css='atencao'}
+  else {decision='REVISAR / PAUSAR';css='ruim'}
+  return {decision,css,reasons:reasons.join(', ')};
+}
+
+function recommendations(a){
+ if(!a.campaigns.length)return [];
+ const best=a.campaigns[0], volume=[...a.campaigns].sort((a,b)=>b.conversations-a.conversations)[0];
+ const rec=[`<strong>${best.campaign}</strong>: melhor eficiência no período, com ${fmtMoney(best.costconv)} por conversa. Classificação: <b>${classify(best)}</b>.`];
+ if(volume.campaign!==best.campaign)rec.push(`<strong>${volume.campaign}</strong>: maior volume de conversas (${fmtNum(volume.conversations)}), com custo médio de ${fmtMoney(volume.costconv)}.`);
+ const watch=[...a.campaigns].sort((a,b)=>b.costconv-a.costconv)[0];
+ if(watch)rec.push(`<strong>${watch.campaign}</strong>: maior custo por conversa entre as campanhas analisadas (${fmtMoney(watch.costconv)}). Vale revisar CTR, CPM, CPC e qualidade do lead antes de cortar investimento.`);
+ return rec;
+}
+function renderBar(title,items,valueFn,labelFn){
+ let max=Math.max(...items.map(valueFn),1);
+ return `<div class="chart"><h3>${title}</h3>${items.map(x=>`<div class="barrow"><span>${x.campaign}</span><div class="track"><div class="bar" style="width:${Math.max(2,valueFn(x)/max*100)}%"></div></div><b>${labelFn(x)}</b></div>`).join('')}</div>`
+}
+
+function metricAdvice(name,value,c){
+  const [status,css,why]=indicatorStatus(name,value,{reach:c.reach||0,spend:c.spend||0});
+  let action='';
+  if(name==='CTR'){
+    if(status==='EXCELENTE') action='Manter o criativo e a oferta; usar como referência para novos testes.';
+    else if(status==='BOM') action='Continuar rodando e testar pequenas variações sem substituir o vencedor.';
+    else if(status==='ATENÇÃO') action='Testar novo gancho, primeira imagem/cena, headline e clareza da oferta.';
+    else action='Prioridade de melhoria: trocar criativo/gancho e revisar se a oferta está clara para o público.';
+  } else if(name==='CPM'){
+    if(status==='EXCELENTE'||status==='BOM') action='Entrega saudável; não mexer apenas por CPM.';
+    else if(status==='ATENÇÃO') action='Revisar amplitude do público, posicionamentos e qualidade do criativo.';
+    else action='Investigar público restrito/competitivo e criativo; se custo por conversa também estiver ruim, reduzir verba ou pausar para ajuste.';
+  } else if(name==='FREQUÊNCIA'){
+    if(status==='BOM') action='Sem sinal relevante de saturação.';
+    else if(status==='ATENÇÃO') action='Preparar novos criativos e acompanhar queda de CTR nos próximos dias.';
+    else action='Renovar criativo e/ou ampliar público; repetição pode estar gerando fadiga.';
+  } else if(name==='CUSTO/CONVERSA'){
+    if(status==='EXCELENTE') action='Candidata a receber mais verba, desde que mantenha volume e qualidade das conversas.';
+    else if(status==='BOM') action='Manter investimento e acompanhar estabilidade.';
+    else if(status==='ATENÇÃO') action='Não pausar automaticamente: verificar CTR, CPM e volume para descobrir a causa.';
+    else action='Prioridade alta: revisar criativo, oferta, público e orçamento; considerar pausa se os demais sinais também estiverem ruins.';
+  } else if(name==='ALCANCE'){
+    action='Interpretar junto com investimento e frequência; alcance sozinho não determina se a campanha deve parar.';
+  } else if(name==='INVESTIMENTO'){
+    action='Comparar o gasto com conversas e custo por conversa; investimento alto só é problema quando não retorna volume/eficiência.';
+  }
+  return {status,css,why,action};
+}
+function campaignDetail(c){
+  const d=campaignDiagnosis(c);
+  const metrics=[
+    ['CTR',c.ctr,`${fmtDec(c.ctr)}%`],
+    ['CPM',c.cpm,fmtMoney(c.cpm)],
+    ['FREQUÊNCIA',c.frequency,fmtDec(c.frequency)],
+    ['CUSTO/CONVERSA',c.costconv,fmtMoney(c.costconv)],
+    ['ALCANCE',c.reach||0,fmtNum(c.reach||0)]
+  ];
+  const boxes=metrics.map(([name,val,label])=>{
+    const x=metricAdvice(name,val,c);
+    return `<div class="metric-mini">
+      <div class="mname">${name}</div><div class="mval">${label}</div>
+      <span class="badge ${x.css}">${x.status}</span>
+      <div class="note">${x.action}</div>
+    </div>`;
+  }).join('');
+  const priorities=metrics.map(([name,val])=>[name,metricAdvice(name,val,c)]).filter(x=>x[1].status==='RUIM'||x[1].status==='ATENÇÃO');
+  const priorityText=priorities.length
+    ? priorities.map(x=>`<b>${x[0]}:</b> ${x[1].action}`).join('<br>')
+    : '<b>Nenhum alerta principal:</b> os indicadores estão equilibrados. Manter e acompanhar estabilidade.';
+  return `<div class="campaign-card">
+    <div class="campaign-head"><h3>${c.campaign}</h3><span class="badge ${d.css}">${d.decision}</span></div>
+    <div class="campaign-body">
+      <div class="metric-grid">${boxes}</div>
+      <div class="actionbox"><b>Diagnóstico e prioridade de melhoria</b><br>${priorityText}</div>
+    </div>
+  </div>`;
+}
+
+function render(entries,month){
+ if(!entries.length){$('#app').innerHTML='<div class="empty">Nenhum dado salvo para este mês.</div>';return}
+ const a=aggregate(entries); const days=entries.length;
+ const monthLabel=month.split('-').reverse().join('/');
+ const rows=a.campaigns.map(c=>{const d=campaignDiagnosis(c);return `<tr><td>${c.campaign}</td><td>${fmtMoney(c.spend)}</td><td>${fmtNum(c.conversations)}</td><td>${fmtMoney(c.costconv)}</td><td>${fmtDec(c.ctr)}%</td><td>${fmtMoney(c.cpm)}</td><td>${fmtDec(c.frequency)}</td><td><span class="badge ${d.css}">${d.decision}</span><div class="note">${d.reasons}</div></td></tr>`}).join('');
+ const dayTrend=entries.map(e=>{let x=aggregate([e]);return {campaign:e.date,conversations:x.conv,costconv:x.cost,spend:x.spend}});
+ $('#app').innerHTML=`
+ <div class="grid">
+  <div class="card kpi"><div class="label">Investimento no mês</div><div class="value">${fmtMoney(a.spend)}</div><div class="note">${days} dia(s) importado(s)</div></div>
+  <div class="card kpi"><div class="label">Conversas</div><div class="value">${fmtNum(a.conv)}</div><div class="note">Campanhas com conversa iniciada</div></div>
+  <div class="card kpi"><div class="label">Custo médio / conversa</div><div class="value">${fmtMoney(a.cost)}</div><div class="note">Média ponderada do mês</div></div>
+  <div class="card kpi"><div class="label">Alcance somado*</div><div class="value">${fmtNum(a.reach)}</div><div class="note">Pode conter pessoas repetidas</div></div>
+ </div>
+ <div class="section-title"><h2>Indicadores de saúde da conta</h2><span class="note">Leitura automática: excelente, bom, atenção ou ruim</span></div>
+ <div class="indicators">${buildIndicators(entries,a)}</div>
+ <div class="section-title"><h2>Ranking das campanhas — ${monthLabel}</h2><span class="note">Decisão combinando custo, volume, CTR, CPM e frequência</span></div>
+ <table><thead><tr><th>Campanha</th><th>Invest.</th><th>Conversas</th><th>Custo/Conv.</th><th>CTR</th><th>CPM</th><th>Freq.</th><th>Decisão</th></tr></thead><tbody>${rows}</tbody></table>
+ <div class="section-title"><h2>Diagnóstico campanha a campanha</h2><span class="note">O que está bom e o que deve ser melhorado em cada campanha</span></div>
+ ${a.campaigns.map(c=>campaignDetail(c)).join('')}
+ <div class="section-title"><h2>Visão visual</h2></div>
+ <div class="two">
+  ${renderBar('Conversas por campanha',a.campaigns,x=>x.conversations,x=>fmtNum(x.conversations))}
+  ${renderBar('Custo por conversa',a.campaigns,x=>x.costconv,x=>fmtMoney(x.costconv))}
+ </div>
+ <div class="section-title"><h2>Evolução diária</h2></div>
+ <div class="two">
+  ${renderBar('Conversas por dia',dayTrend,x=>x.conversations,x=>fmtNum(x.conversations))}
+  ${renderBar('Custo médio por conversa / dia',dayTrend,x=>x.costconv,x=>fmtMoney(x.costconv))}
+ </div>
+ <div class="section-title"><h2>Recomendações automáticas</h2></div>
+ ${recommendations(a).map(x=>`<div class="rec">${x}</div>`).join('')}
+ <div class="note">* O alcance é somado entre campanhas e dias e pode conter sobreposição. Campanhas sem conversas são separadas da análise principal de mensagens. A decisão automática combina custo por conversa, volume, CTR, CPM e frequência. As faixas são provisórias e serão refinadas com o histórico real da Zayron.</div>`;
+}
+function refresh(){
+ const h=getHist(), months=[...new Set(h.map(x=>monthKey(x.date)).filter(Boolean))].sort().reverse();
+ const sel=$('#month'), current=sel.value;
+ sel.innerHTML=months.length?months.map(m=>`<option value="${m}">${m.split('-').reverse().join('/')}</option>`).join(''):'<option>Sem histórico</option>';
+ if(current&&months.includes(current))sel.value=current;
+ const m=sel.value; $('#status').textContent=h.length?`${h.length} importação(ões) salva(s) neste navegador.`:'Nenhum histórico salvo.';
+ if(months.length)render(h.filter(x=>monthKey(x.date)===m),m);
+ else $('#app').innerHTML='<div class="empty">Importe o primeiro CSV da Zayron para começar.</div>';
+}
+$('#file').addEventListener('change',async e=>{
+ const f=e.target.files[0]; if(!f)return;
+ try{const entry=normalize(parseCSV(await f.text())); importDaily(entry)}catch(err){alert('Não consegui ler o CSV. '+err.message)}
+ e.target.value='';
+});
+$('#month').addEventListener('change',refresh);
+$('#exportBtn').addEventListener('click',()=>{
+ const data=JSON.stringify(getHist(),null,2), blob=new Blob([data],{type:'application/json'}), a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);a.download='zayron_historico_backup.json';a.click();URL.revokeObjectURL(a.href);
+});
+$('#historyFile').addEventListener('change',async e=>{
+ const f=e.target.files[0];if(!f)return;
+ try{const x=JSON.parse(await f.text());if(!Array.isArray(x))throw 0;saveHist(x);toast('Histórico restaurado.');refresh()}catch{alert('Arquivo de histórico inválido.')}
+ e.target.value='';
+});
+$('#clearBtn').addEventListener('click',()=>{if(confirm('Apagar todo o histórico salvo neste navegador?')){localStorage.removeItem(storeKey);refresh();}});
+refresh();
+</script>
+</body>
+</html>
